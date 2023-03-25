@@ -86,7 +86,7 @@ export default class MainHW4Scene extends HW4Scene {
         this.load.spritesheet("RedHealer", "hw4_assets/spritesheets/RedHealer.json");
 
         // Load the tilemap
-        this.load.tilemap("level", "hw4_assets/tilemaps/HW4Tilemap.json");
+        this.load.tilemap("level", "hw4_assets/tilemaps/HW4Tileset.json");
 
         // Load the enemy locations
         this.load.object("red", "hw4_assets/data/enemies/red.json");
@@ -107,7 +107,6 @@ export default class MainHW4Scene extends HW4Scene {
     public override startScene() {
         // Add in the tilemap
         let tilemapLayers = this.add.tilemap("level");
-
         // Get the wall layer
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
 
@@ -217,7 +216,7 @@ export default class MainHW4Scene extends HW4Scene {
      */
     protected initializePlayer(): void {
         let player = this.add.animatedSprite(PlayerActor, "player1", "primary");
-        player.position.set(40, 40);
+        player.position.set(60, 60);
         player.battleGroup = 2;
 
         player.health = 10;
@@ -271,7 +270,7 @@ export default class MainHW4Scene extends HW4Scene {
             let healthbar = new HealthbarHUD(this, npc, "primary", {size: npc.size.clone().scaled(2, 1/2), offset: npc.size.clone().scaled(0, -1/2)});
             this.healthbars.set(npc.id, healthbar);
 
-            npc.addAI(HealerBehavior);
+            npc.addAI(HealerBehavior, {target: new BasicTargetable(new Position(npc.position.x, npc.position.y)), range: 100});
             npc.animation.play("IDLE");
             this.battlers.push(npc);
         }
@@ -344,7 +343,7 @@ export default class MainHW4Scene extends HW4Scene {
             let healthbar = new HealthbarHUD(this, npc, "primary", {size: npc.size.clone().scaled(2, 1/2), offset: npc.size.clone().scaled(0, -1/2)});
             this.healthbars.set(npc.id, healthbar);
 
-            npc.addAI(HealerBehavior);
+            npc.addAI(HealerBehavior,{target: new BasicTargetable(new Position(npc.position.x, npc.position.y)), range: 100});
             npc.animation.play("IDLE");
             this.battlers.push(npc);
         }
@@ -427,11 +426,12 @@ export default class MainHW4Scene extends HW4Scene {
         let navmesh = new Navmesh(this.graph);
         
         // Add different strategies to use for this navmesh
-        navmesh.registerStrategy("direct", new DirectStrategy(navmesh));
         navmesh.registerStrategy("astar", new AstarStrategy(navmesh));
+        navmesh.registerStrategy("direct", new DirectStrategy(navmesh));
 
         // TODO set the strategy to use A* pathfinding
-        navmesh.setStrategy("direct");
+        navmesh.setStrategy("astar");
+        // navmesh.setStrategy("direct");
 
         // Add this navmesh to the navigation manager
         this.navManager.addNavigableEntity("navmesh", navmesh);

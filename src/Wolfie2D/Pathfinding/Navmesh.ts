@@ -36,6 +36,8 @@ export default class Navmesh implements Navigable<Vec2, NavigationPath> {
         if (this._strategy === undefined) { 
             throw new Error("Error.No pathfinding strategy set for this navmesh.");
         }
+        // console.log("strattttttt")
+        // console.log(this._strateg
 		return this._strategy.buildPath(toPosition, fromPosition);
 	}
 

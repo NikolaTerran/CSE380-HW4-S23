@@ -6,6 +6,7 @@ import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import NavigationPath from "../../Wolfie2D/Pathfinding/NavigationPath";
 import Navmesh from "../../Wolfie2D/Pathfinding/Navmesh";
 import DirectStrategy from "../../Wolfie2D/Pathfinding/Strategies/DirectStrategy";
+import DjikstraStrategy from "../../Wolfie2D/Pathfinding/Strategies/DjikstraStrategy";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import MathUtils from "../../Wolfie2D/Utils/MathUtils";
@@ -26,6 +27,7 @@ export default class AStarDemoScene extends Scene {
     public loadScene(): void {
         this.load.tilemap("level", "hw4_assets/tilemaps/HW4Tilemap.json");
         this.load.spritesheet("BlueEnemy", "hw4_assets/spritesheets/BlueEnemy.json");
+        this.load.spritesheet("RedEnemy", "hw4_assets/spritesheets/RedEnemy.json");
     }
 
     public startScene(): void {
@@ -43,9 +45,10 @@ export default class AStarDemoScene extends Scene {
         // Register the different pathfinding strategies with the navmesh
         navmesh.registerStrategy("direct", new DirectStrategy(navmesh));
         navmesh.registerStrategy("astar", new AstarStrategy(navmesh));
-        
+        navmesh.registerStrategy("djkstra", new DjikstraStrategy(navmesh));
+
         // TODO Set the navigation strategy to be A*
-        navmesh.setStrategy("direct");
+        navmesh.setStrategy("astar");
 
         // Create a dummy NPC
         this.npc = this.add.animatedSprite(NPCActor, "BlueEnemy", "primary")
@@ -84,8 +87,11 @@ export default class AStarDemoScene extends Scene {
         }
 
         let rc: Vec2;
+
+
         for (let i = 0; i < graph.numVertices; i++) {
             rc = walls.getTileColRow(i);
+
             if (!walls.isTileCollidable(rc.x, rc.y) &&
                 !walls.isTileCollidable(MathUtils.clamp(rc.x - 1, 0, dim.x - 1), rc.y) &&
                 !walls.isTileCollidable(MathUtils.clamp(rc.x + 1, 0, dim.x - 1), rc.y) &&
@@ -97,6 +103,8 @@ export default class AStarDemoScene extends Scene {
                 !walls.isTileCollidable(MathUtils.clamp(rc.x - 1, 0, dim.x - 1), MathUtils.clamp(rc.y - 1, 0, dim.y - 1))
 
             ) {
+                
+                    
                 // Create edge to the left
                 rc = walls.getTileColRow(i + 1);
                 if ((i + 1) % dim.x !== 0 && !walls.isTileCollidable(rc.x, rc.y)) {
@@ -112,6 +120,11 @@ export default class AStarDemoScene extends Scene {
 
 
             }
+
+            // let zz = walls.getTileColRow(graph.snap(new Vec2(148,148)))
+            // console.log("collidable????????????")
+            // console.log(graph.getNodePosition(graph.snap(new Vec2(148,148))))
+            // console.log(walls.getWorldPosition(zz.x,zz.y))
         }
 
         // Set this graph as a navigable entity

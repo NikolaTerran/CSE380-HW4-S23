@@ -16,6 +16,7 @@ import GameEvent from "../../../../Wolfie2D/Events/GameEvent";
 import GoapAction from "../../../../Wolfie2D/AI/Goap/GoapAction";
 import GoapState from "../../../../Wolfie2D/AI/Goap/GoapState";
 import Battler from "../../../GameSystems/BattleSystem/Battler";
+import Healthpack from "../../../GameSystems/ItemSystem/Items/Healthpack";
 
 
 export default class GuardBehavior extends NPCBehavior {
@@ -54,6 +55,7 @@ export default class GuardBehavior extends NPCBehavior {
     }
 
     public update(deltaT: number): void {
+        // console.log(this.currentState )
         super.update(deltaT);
     }
 

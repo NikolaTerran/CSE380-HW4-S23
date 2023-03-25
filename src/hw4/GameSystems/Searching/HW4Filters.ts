@@ -20,6 +20,15 @@ export function AllyFilter(battler: Battler): (other: Battler) => boolean {
     return (other: Battler) => { return battler.battleGroup === other.battleGroup; }
 }
 
+export function CustomFilter(battler: Battler): (other: Battler) => boolean {
+    return (other: Battler) => { 
+        // if(battler.battleGroup === other.battleGroup && battler.id !== other.id && other.health < other.maxHealth){
+        //     console.log(other);
+        // }
+        
+        return battler.battleGroup === other.battleGroup && battler.id !== other.id && other.health < other.maxHealth}
+}
+
 export function EnemyFilter(battler: Battler): (other: Battler) => boolean {
     return (other: Battler) => { return battler.battleGroup !== other.battleGroup; }
 }

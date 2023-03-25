@@ -51,11 +51,59 @@ export default abstract class NPCAction extends GoapAction {
             this.actor.setTarget(this.target);
             // Construct a path from the actor to the target
             this.path = this.actor.getPath(this.actor.position, this.target.position);
+
+            // console.log(this.actor)
+            // console.log(this.actor.position)
+            // console.log(this.target.position)
+            // console.log(this.actor.getPath(this.actor.position, this.target.position))
         }
     }
 
     public update(deltaT: number): void {
         // TODO get the NPCs to move on their paths
+        if(this.path !== null){
+            this.actor.moveOnPath(1, this.path)
+
+            // console.log(this.target)
+            // console.log(this.path)
+
+        }else{
+            this.target = this.targetFinder.find(this.targets);
+            // If we found a target, set the NPCs target to the target and find a path to the target
+            // if (this.target !== null) {
+                // Set the actors current target to be the target for this action
+                this.actor.setTarget(this.target);
+                // Construct a path from the actor to the target
+                this.path = this.actor.getPath(this.actor.position, this.target.position);
+
+                
+                // this.path = this.actor.getPath
+
+                console.log(this.target)
+                console.log(this.path)
+                
+            // }
+        }
+
+        
+
+        if (this.target !== null) {
+
+            // if(this.actor.imageId !== "RedEnemy"){
+            //     // console.log(this.actor)
+            //     console.log(this.target)
+            //     console.log(this.path)
+            // }
+            
+            if(this.actor.atTarget()){
+
+                this.performAction(this.actor.getTarget())
+            
+            }
+        }
+
+        
+        
     }
 
     public abstract performAction(target: TargetableEntity): void;

@@ -36,6 +36,9 @@ export default class NavigationManager {
 	 */
 	getPath(navName: string, fromPosition: Vec2, toPosition: Vec2): NavigationPath {
 		let nav = this.navigableEntities.get(navName);
+		console.log("wwwwwwwwwwwwww")
+		console.log(nav.getNavigationPath(fromPosition.clone(), toPosition.clone()))
+		
 		return nav.getNavigationPath(fromPosition.clone(), toPosition.clone());
 	}
 }
